@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="520" viewBox="0 0 920 520" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <rect width="920" height="520" fill="#ffffff"/>
+
+  <text x="460" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">ASG — AI Savings Gateway</text>
+  <text x="460" y="56" text-anchor="middle" font-size="13" fill="#64748b">Server-side token optimization between your AI client and the model provider</text>
+
+  <!-- Client box -->
+  <rect x="40" y="110" width="200" height="180" rx="12" fill="#f0f9ff" stroke="#0ea5e9" stroke-width="1.5"/>
+  <text x="140" y="136" text-anchor="middle" font-size="14" font-weight="700" fill="#0369a1">AI clients</text>
+  <text x="140" y="158" text-anchor="middle" font-size="11" fill="#0c4a6e">Claude Code · Cline</text>
+  <text x="140" y="174" text-anchor="middle" font-size="11" fill="#0c4a6e">Cursor · opencode</text>
+  <text x="140" y="190" text-anchor="middle" font-size="11" fill="#0c4a6e">NextChat · pi · Codex</text>
+  <text x="140" y="222" text-anchor="middle" font-size="10" fill="#64748b">unchanged, except</text>
+  <text x="140" y="238" text-anchor="middle" font-size="10" fill="#64748b">base_url → ASG</text>
+
+  <!-- Edge -->
+  <rect x="300" y="110" width="150" height="180" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="375" y="136" text-anchor="middle" font-size="14" font-weight="700" fill="#334155">HTTP edge</text>
+  <text x="375" y="158" text-anchor="middle" font-size="11" fill="#475569">nginx · TLS</text>
+  <text x="375" y="174" text-anchor="middle" font-size="11" fill="#475569">/v1 routing</text>
+  <text x="375" y="190" text-anchor="middle" font-size="11" fill="#475569">no buffering</text>
+  <text x="375" y="222" text-anchor="middle" font-size="10" fill="#64748b">streaming-safe</text>
+
+  <!-- ASG gateway -->
+  <rect x="510" y="80" width="180" height="240" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  <text x="600" y="106" text-anchor="middle" font-size="14" font-weight="700" fill="#047857">ASG gateway</text>
+  <text x="600" y="132" text-anchor="middle" font-size="10" fill="#065f46">L1 request normalization</text>
+  <text x="600" y="150" text-anchor="middle" font-size="10" fill="#065f46">L2 context folding</text>
+  <text x="600" y="168" text-anchor="middle" font-size="10" fill="#065f46">L3 dual-mode output</text>
+  <text x="600" y="186" text-anchor="middle" font-size="10" fill="#065f46">L4 prefix-cache mgmt</text>
+  <text x="600" y="204" text-anchor="middle" font-size="10" fill="#065f46">L5 tool-call robustness</text>
+  <text x="600" y="222" text-anchor="middle" font-size="10" fill="#065f46">L6 routing (optional)</text>
+  <text x="600" y="254" text-anchor="middle" font-size="10" fill="#64748b">fail-open · shadow-capable</text>
+  <text x="600" y="270" text-anchor="middle" font-size="10" fill="#64748b">closed source</text>
+
+  <!-- Providers -->
+  <rect x="760" y="110" width="150" height="180" rx="12" fill="#fefce8" stroke="#ca8a04" stroke-width="1.5"/>
+  <text x="835" y="136" text-anchor="middle" font-size="14" font-weight="700" fill="#854d0e">Model providers</text>
+  <text x="835" y="158" text-anchor="middle" font-size="11" fill="#713f12">DeepSeek · GLM</text>
+  <text x="835" y="174" text-anchor="middle" font-size="11" fill="#713f12">Qwen · MiniMax</text>
+  <text x="835" y="190" text-anchor="middle" font-size="11" fill="#713f12">OpenAI · Anthropic · xAI</text>
+  <text x="835" y="222" text-anchor="middle" font-size="10" fill="#64748b">prefix cache + warmup</text>
+
+  <!-- Arrows -->
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <line x1="242" y1="200" x2="296" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="452" y1="200" x2="506" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="692" y1="200" x2="756" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Token mgmt -->
+  <rect x="510" y="360" width="180" height="70" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="600" y="386" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">Token management</text>
+  <text x="600" y="406" text-anchor="middle" font-size="10" fill="#475569">relay / admin / keys</text>
+  <line x1="600" y1="322" x2="600" y2="356" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+  <!-- Footer metrics -->
+  <rect x="40" y="400" width="410" height="90" rx="12" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="245" y="428" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">Production results</text>
+  <text x="245" y="452" text-anchor="middle" font-size="12" fill="#15803d">~86% overall input-cost reduction</text>
+  <text x="245" y="472" text-anchor="middle" font-size="12" fill="#15803d">75–94% per-session cache hit rate</text>
+
+  <rect x="470" y="400" width="440" height="90" rx="12" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="690" y="428" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">Complementary to rtk</text>
+  <text x="690" y="452" text-anchor="middle" font-size="12" fill="#b91c1c">rtk: client-side, filters command output</text>
+  <text x="690" y="472" text-anchor="middle" font-size="12" fill="#b91c1c">ASG: server-side, optimizes traffic in-flight</text>
+</svg>
