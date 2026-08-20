@@ -1,0 +1,47 @@
+# nginx routing example
+
+ASG is normally deployed behind nginx. This example shows the routing shape:
+path-based split between the public edge and the gateway's optimization path,
+plus the streaming settings that matter (no buffering).
+
+Replace `asg.example.com` with your domain and `1.2.3.4:18788` with your
+gateway address.
+
+```nginx
+# /etc/nginx/sites-available/asg
+
+# Public edge: everything /v1 goes to the ASG gateway
+server {
+    listen 80;
+    listen [::]:80;
+    server_name asg.example.com;
+
+    location /v1/ {
+        proxy_pass http://127.0.0.1:18788;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # Streaming must not be buffered
+        proxy_buffering off;
+        proxy_cache off;
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+    }
+
+    # Health check
+    location = /healthz {
+        proxy_pass http://127.0.0.1:18788/healthz;
+        access_log off;
+    }
+}
+```
+
+## Notes
+
+- **Disable buffering** for `/v1/` — SSE streams stall if the proxy buffers.
+- **Timeouts** — long streaming generations need read timeouts well above the
+  slowest turn (here 300s).
+- **TLS** — terminate at nginx (Let's Encrypt) so clients use `https://`.
+- The gateway itself binds to localhost; only nginx is exposed.
