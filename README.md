@@ -4,7 +4,7 @@
 
 [Website](http://www.agentgwapi.online:8888/) · [Documentation](docs/) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
-VBK-AI Agent Gateway (agent-gateway) is a server-side API gateway that optimizes LLM traffic for AI coding agents. It sits between your agent and LLM providers, applying caching, request normalization, and routing strategies to reduce token costs by **50-95%** — with zero client-side changes.
+VBK-AI Agent Gateway is a server-side API gateway that optimizes LLM traffic for AI coding agents. It sits between your agent and LLM providers, applying proprietary caching, normalization, and routing strategies to reduce token costs by **50-95%** — with zero client-side changes.
 
 > **Zero install.** Register at [www.agentgwapi.online/register](http://www.agentgwapi.online:8888/register), add your provider API key, and point your agent's `base_url` to your gateway endpoint.
 
@@ -14,15 +14,9 @@ VBK-AI Agent Gateway (agent-gateway) is a server-side API gateway that optimizes
 
 1. **Register** — Visit [www.agentgwapi.online/register](http://www.agentgwapi.online:8888/register) and create a free account
 2. **Add Provider Key** — In the dashboard, add your DeepSeek / Anthropic / OpenAI / Qwen / Gemini API key
-3. **Configure Agent** — Change your agent's `base_url` to your gateway endpoint:
-
-```
-https://your-gateway-url/v1
-```
+3. **Configure Agent** — Change your agent's `base_url` to your gateway endpoint and start coding
 
 That's it. Your existing workflow is unchanged — same agent, same models, lower cost.
-
----
 
 ---
 
@@ -31,6 +25,7 @@ That's it. Your existing workflow is unchanged — same agent, same models, lowe
 **Tristan Qin** · **Tomcom Shu** · **Lewis**
 
 ---
+
 ## Supported Agents
 
 | Agent | Provider | Status |
@@ -65,76 +60,29 @@ That's it. Your existing workflow is unchanged — same agent, same models, lowe
 
 ---
 
-## Optimization Layers
-
-| Layer | What It Does | Savings |
-|-------|-------------|---------|
-| **L1 Request Normalization** | System prompt dedup, tool schema compression, cache-aware prefix ordering | Prefix-cache hits 75-94% |
-| **L2 Context Folding** | Compress conversation history while preserving semantic structure | ~350k tokens saved per session |
-| **Dual-Mode Output Constraint** | Structured output enforcement for tool-call responses | 91.7% KV cache hit rate |
-| **Cache (cache_control + warmup)** | Anthropic-native 1h cache, cross-session prefix warmup | 90% cost reduction on cached tokens |
-| **Tool-call Fix** | Streaming tool-call normalization across all providers | Eliminates stuck/hallucinated tool calls |
-| **Intent Routing** | Lightweight classifier routes simple queries to cheaper models | Route-based cost reduction |
-
-**Combined effect: ~86% average token-cost reduction** on production workloads.
-
-See [BENCHMARK.md](docs/benchmarks/BENCHMARK.md) for detailed per-layer measurements.
-
----
-
 ## How It Works
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     Your Machine                                │
-│  ┌──────────┐     base_url     ┌──────────────────────────┐    │
-│  │ Agent    │ ──────────────►  │  VBK-AI Agent Gateway    │    │
-│  │ (Cursor, │   /v1/chat/      │                          │    │
-│  │  Cline,  │   completions    │  L1 Normalize            │    │
-│  │  Aider,  │                  │  L2 Context Fold         │    │
-│  │  ...)    │ ◄────────────── │  Dual-Mode Output        │    │
-│  │          │   optimized      │  Cache + Warmup          │    │
-│  │          │   response       │  Intent Router            │    │
-│  └──────────┘                  └──────────┬───────────────┘    │
-│                                           │                    │
-└───────────────────────────────────────────┼────────────────────┘
-                                            │ optimized request
-                                            ▼
-                                   ┌────────────────┐
-                                   │  LLM Provider   │
-                                   │  (DeepSeek,     │
-                                   │   Anthropic,    │
-                                   │   OpenAI, ...)  │
-                                   └────────────────┘
+Your Agent (Cursor, Cline, Aider, ...)
+        │
+        ▼
+  VBK-AI Agent Gateway
+  ┌─────────────────────────────┐
+  │  Proprietary Optimization   │
+  │  • Request normalization    │
+  │  • Context compression      │
+  │  • Smart caching & routing  │
+  └──────────┬──────────────────┘
+             │ optimized request
+             ▼
+       LLM Provider
+  (DeepSeek, Anthropic,
+   OpenAI, Gemini, ...)
 ```
 
----
+Your agent sends requests to the gateway instead of directly to the LLM provider. The gateway applies multiple layers of proprietary optimization transparently — your coding workflow stays exactly the same.
 
-## Configuration
-
-### Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `GATEWAY_PORT` | Gateway listen port | `18788` |
-| `AI_GATEWAY_PORT` | ai-gateway (VaalaCat) port | `8140` |
-| `NEWAPI_ENABLED` | Enable NewAPI compatibility layer | `true` |
-| `DEEPSEEK_API_KEY` | DeepSeek provider key | — |
-| `ANTHROPIC_API_KEY` | Anthropic provider key | — |
-| `OPENAI_API_KEY` | OpenAI provider key | — |
-
-### .env Configuration
-
-```bash
-# Copy from .env.example
-cp .env.example .env
-
-# Edit with your API keys
-vim .env
-
-# Start the gateway
-python gateway_merged.py
-```
+See [BENCHMARK.md](docs/benchmarks/BENCHMARK.md) for detailed performance measurements.
 
 ---
 
@@ -151,8 +99,7 @@ python gateway_merged.py
 
 | Document | Description |
 |----------|-------------|
-| [docs/getting-started/](docs/getting-started/) | Installation and configuration guides |
-| [docs/concepts/](docs/concepts/) | Architecture and optimization layer explanations |
+| [docs/getting-started/](docs/getting-started/) | Quick start and client configuration guides |
 | [docs/benchmarks/BENCHMARK.md](docs/benchmarks/BENCHMARK.md) | Detailed performance measurements |
 | [SECURITY.md](SECURITY.md) | Security policy and vulnerability reporting |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines |
@@ -177,8 +124,8 @@ The VBK-AI Agent Gateway software itself is proprietary. See [LICENSE](LICENSE) 
 
 ## Links
 
-- 🌐 **Website**: [www.agentgwapi.online](http://www.agentgwapi.online:8888/)
+- **Website**: [www.agentgwapi.online](http://www.agentgwapi.online:8888/)
 - **Register**: [www.agentgwapi.online/register](http://www.agentgwapi.online:8888/register)
 - **Login**: [www.agentgwapi.online/login](http://www.agentgwapi.online:8888/login)
-- 📧 **Email**: support@agentgwapi.online
-- 🐛 **Issues**: [GitHub Issues](https://github.com/430024299qt-cpu/VBK-AI-Agent-Gateway/issues)
+- **Email**: support@agentgwapi.online
+- **Issues**: [GitHub Issues](https://github.com/VBK-AI-Agent-Gateway/VBK-AI-Agent-Gateway/issues)
