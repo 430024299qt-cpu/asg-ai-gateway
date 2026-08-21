@@ -1,150 +1,172 @@
-<p align="center">
-  <strong>ASG — AI Savings Gateway</strong>
-</p>
+# VBK-AI Agent Gateway
 
-<h3 align="center">Same budget. Ship more code.</h3>
+**Same budget. Ship more code.**
 
-<p align="center">
-  A <strong>hosted API gateway</strong> that sits between your AI coding tools and model providers.<br>
-  Bring your own API keys. Token costs drop <strong>50%–95%</strong>. Zero installation.
-</p>
+[Website](https://www.agentgwapi.online/) · [Documentation](docs/) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
-<p align="center">
-  <a href="http://www.agentgwapi.online/">Website</a> · <a href="http://154.12.86.206:8888/">Dashboard</a> · <a href="docs/getting-started/quickstart.md">Quick Start</a> · <a href="docs/faq.md">FAQ</a>
-</p>
+VBK-AI Agent Gateway (agent-gateway) is a server-side API gateway that optimizes LLM traffic for AI coding agents. It sits between your agent and LLM providers, applying caching, request normalization, and routing strategies to reduce token costs by **50-95%** — with zero client-side changes.
+
+> **Zero install.** Register at [www.agentgwapi.online](https://www.agentgwapi.online/), add your provider API key, and point your agent's `base_url` to your gateway endpoint.
 
 ---
 
-## Why ASG exists
+## Quick Start (3 Steps)
 
-AI coding agents are token-hungry. A single multi-turn session with tool calls can burn tens of thousands of input tokens per request — most of it **repetition**: the same system prompt, the same tool schemas, the same long conversation history, re-sent and re-billed every turn.
+1. **Register** — Visit [www.agentgwapi.online](https://www.agentgwapi.online/) and create a free account
+2. **Add Provider Key** — In the dashboard, add your DeepSeek / Anthropic / OpenAI / Qwen / Gemini API key
+3. **Configure Agent** — Change your agent's `base_url` to your gateway endpoint:
 
-Client-side tools (e.g. Rust CLIs) trim command output *before* it reaches the model. That helps — but it only covers one slice of the waste. The biggest slice happens **on the wire**, at the API layer.
-
-ASG attacks all four sources of waste **server-side**, transparently, for every client that points at it.
-
----
-
-## Quick start — no installation required
-
-ASG is a **hosted SaaS gateway**. There is nothing to install. You keep using your existing tools and API keys — just point them at ASG.
-
-| Step | What to do |
-|------|------------|
-| **1** | **Register** at [154.12.86.206:8888](http://154.12.86.206:8888/) — create a free account |
-| **2** | **Add your API key(s)** in the dashboard — DeepSeek, OpenAI, Anthropic, GLM, Qwen, MiniMax, xAI, Gemini, and more |
-| **3** | **Change one URL** in your client — point `base_url` to `http://154.12.86.206:8888/v1` |
-
-That's it. Your client talks the same OpenAI-compatible API. ASG intercepts, optimizes, and forwards — you see the savings in the dashboard.
-
-```text
-BEFORE:  Claude Code ──────────────► api.deepseek.com   (full price)
-AFTER:   Claude Code ──► ASG :8888 ──► api.deepseek.com  (50-95% less)
+```
+https://your-gateway-url/v1
 ```
 
-> **Works with any OpenAI-compatible or Anthropic-compatible client.**
-> Claude Code, Cursor, Windsurf, Cline, Codex CLI, Continue, Aider, OpenCode, and more — no agent-side changes needed.
+That's it. Your existing workflow is unchanged — same agent, same models, lower cost.
 
 ---
 
-## What you save
+## Supported Agents
 
-ASG stacks multiple optimization layers. Each one addresses a different source of waste:
-
-| Layer | Mechanism | What it does | Where it saves |
-|-------|-----------|--------------|----------------|
-| **L1** | Request normalization | Canonicalizes messages, sorts tool schemas, strips volatile fields | Raises provider prefix-cache hit rate |
-| **L2** | Context folding | Compresses cold conversation history into compact `[FOLD]` markers | Shrinks per-turn input tokens |
-| **Dual-Mode** | Output constraint | Injects a structural contract that makes the model emit compact output | Cuts output tokens |
-| **Cache** | `cache_control` injection + warmup | Explicitly marks stable prefixes for provider caching and pre-warms them | Moves tokens from billed to cached |
-| **Tool-call fix** | Empty-call cleanup + stream delta normalization | Removes malformed `tool_calls` frames that force expensive retries | Eliminates whole wasted turns |
-| **Routing** | Intent classification + rules | (Optional) Routes requests to the cheapest capable model | Cuts unit price |
-
-**Measured on the production deployment: ~86% overall token-cost reduction**, with per-session prefix-cache hit rates of 75–94% (peak above 96%).
-
-> For detailed methodology, per-layer breakdown, and honest limitations, see [docs/benchmarks/](docs/benchmarks/).
+| Agent | Provider | Status |
+|-------|----------|--------|
+| **Claude Code** | Anthropic | ✅ Production |
+| **Cursor** | OpenAI-compatible | ✅ Production |
+| **Windsurf** | OpenAI-compatible | ✅ Production |
+| **Cline** | OpenAI-compatible | ✅ Production |
+| **Codex CLI** | OpenAI-compatible | ✅ Production |
+| **Continue** | OpenAI-compatible | ✅ Production |
+| **Aider** | OpenAI-compatible | ✅ Production |
+| **OpenCode** | OpenAI-compatible | ✅ Production |
 
 ---
 
-## Supported models & platforms
-
-One gateway, **all major providers**:
+## Supported Providers
 
 | Provider | Models |
 |----------|--------|
-| DeepSeek | deepseek-v4-flash, deepseek-chat, deepseek-r1, … |
-| Anthropic | claude-haiku-4-5, claude-sonnet-4, claude-opus-4, … |
-| OpenAI | gpt-4o, gpt-4.1, o3, o4-mini, … |
-| GLM (Zhipu) | glm-5.2, glm-5.3, … |
-| Qwen (Alibaba) | qwen3.5-plus, qwen-plus, … |
-| MiniMax | MiniMax-M3, … |
-| xAI | grok-4.5, … |
-| Google Gemini | gemini-2.5-pro, gemini-2.5-flash, … |
-| Xiaomi | mimo-v2.5, … |
-
-You can bring your own keys for any of these, or use ASG's managed keys.
-
-**Compatible with any coding agent** that speaks the OpenAI Chat Completions API or Anthropic Messages API:
-
-Claude Code · Cursor · Windsurf · Cline · Codex CLI · Continue · Aider · OpenCode · Cline · Roo Code · Augment · And more
+| **DeepSeek** | deepseek-v4-flash, deepseek-chat |
+| **Anthropic** | claude-sonnet-4, haiku-4-5, claude-opus-4 |
+| **OpenAI** | gpt-4o, gpt-4o-mini, o1, o3-mini |
+| **Google Gemini** | gemini-2.5-flash, gemini-2.5-pro |
+| **Qwen (Alibaba)** | qwen3.5-plus |
+| **GLM (Zhipu)** | glm-5.2, glm-5.3 |
+| **MiniMax** | MiniMax-M3 |
+| **xAI** | grok-4.5 |
+| **Xiaomi** | mimo-v2.5 |
 
 ---
 
-## Architecture at a glance
+## Optimization Layers
 
-```
-coding agents
-  (Claude Code / Cursor / Cline / Windsurf / ...)
-        │   OpenAI-compatible API
-        ▼
-  nginx :8888          public ingress, TLS, rate limiting, path routing
-        │
-        ▼
-  ASG Gateway :18788   the optimization brain (L1 + L2 + Dual-Mode + Cache + Tool-fix)
-        │
-        ▼
-  Provider Relay :8140  auth, key management, upstream adapters
-        │
-        ▼
-  Model providers       DeepSeek / GLM / Qwen / MiniMax / OpenAI / Anthropic / xAI / ...
-```
+| Layer | What It Does | Savings |
+|-------|-------------|---------|
+| **L1 Request Normalization** | System prompt dedup, tool schema compression, cache-aware prefix ordering | Prefix-cache hits 75-94% |
+| **L2 Context Folding** | Compress conversation history while preserving semantic structure | ~350k tokens saved per session |
+| **Dual-Mode Output Constraint** | Structured output enforcement for tool-call responses | 91.7% KV cache hit rate |
+| **Cache (cache_control + warmup)** | Anthropic-native 1h cache, cross-session prefix warmup | 90% cost reduction on cached tokens |
+| **Tool-call Fix** | Streaming tool-call normalization across all providers | Eliminates stuck/hallucinated tool calls |
+| **Intent Routing** | Lightweight classifier routes simple queries to cheaper models | Route-based cost reduction |
 
-The optimization layers are **protocol-transparent**: clients talk a standard OpenAI-compatible or Anthropic Messages API, and upstreams receive a cleaned, compressed, cache-optimized request. Nothing about the client's request format has to change.
+**Combined effect: ~86% average token-cost reduction** on production workloads.
+
+See [BENCHMARK.md](docs/benchmarks/BENCHMARK.md) for detailed per-layer measurements.
 
 ---
 
-## Privacy & security
+## How It Works
 
-| Concern | What ASG does |
-|---------|---------------|
-| API keys | Stored encrypted at rest. Never shared, never logged in plaintext. |
-| Chat content | Processed in-memory for optimization. Not retained after the request completes. |
-| Model outputs | Forwarded to you in real time. Not stored, not used for training. |
-| Usage data | Aggregate metrics only (token counts, cache hits, latency). No per-message logging. |
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     Your Machine                                │
+│  ┌──────────┐     base_url     ┌──────────────────────────┐    │
+│  │ Agent    │ ──────────────►  │  VBK-AI Agent Gateway    │    │
+│  │ (Cursor, │   /v1/chat/      │                          │    │
+│  │  Cline,  │   completions    │  L1 Normalize            │    │
+│  │  Aider,  │                  │  L2 Context Fold         │    │
+│  │  ...)    │ ◄────────────── │  Dual-Mode Output        │    │
+│  │          │   optimized      │  Cache + Warmup          │    │
+│  │          │   response       │  Intent Router            │    │
+│  └──────────┘                  └──────────┬───────────────┘    │
+│                                           │                    │
+└───────────────────────────────────────────┼────────────────────┘
+                                            │ optimized request
+                                            ▼
+                                   ┌────────────────┐
+                                   │  LLM Provider   │
+                                   │  (DeepSeek,     │
+                                   │   Anthropic,    │
+                                   │   OpenAI, ...)  │
+                                   └────────────────┘
+```
 
-> ASG runs on infrastructure you can audit. See [SECURITY.md](SECURITY.md) for the full security policy.
+---
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `GATEWAY_PORT` | Gateway listen port | `18788` |
+| `AI_GATEWAY_PORT` | ai-gateway (VaalaCat) port | `8140` |
+| `NEWAPI_ENABLED` | Enable NewAPI compatibility layer | `true` |
+| `DEEPSEEK_API_KEY` | DeepSeek provider key | — |
+| `ANTHROPIC_API_KEY` | Anthropic provider key | — |
+| `OPENAI_API_KEY` | OpenAI provider key | — |
+
+### .env Configuration
+
+```bash
+# Copy from .env.example
+cp .env.example .env
+
+# Edit with your API keys
+vim .env
+
+# Start the gateway
+python gateway_merged.py
+```
+
+---
+
+## Privacy & Data Policy
+
+- **No chat content stored**: All requests are proxied in real-time; no conversation logs are retained
+- **API keys encrypted at rest**: Provider keys are stored encrypted in the database
+- **Metrics only**: The dashboard shows aggregate cost/token metrics, not message content
+- **Open audit**: Security practices documented in [SECURITY.md](SECURITY.md)
 
 ---
 
 ## Documentation
 
-- [Overview & design goals](docs/getting-started/overview.md)
-- [Quick Start — point a client at the gateway](docs/getting-started/quickstart.md)
-- [Supported clients](docs/getting-started/supported-clients.md)
-- [Configuration reference](docs/getting-started/configuration.md)
-- [Concepts: how each optimization layer works](docs/concepts/)
-- [Benchmarks & methodology](docs/benchmarks/)
-- [Architecture (no code)](docs/contributing/ARCHITECTURE.md)
-- [Technical deep dive](docs/contributing/TECHNICAL.md)
-- [FAQ](docs/faq.md)
-- [Examples](examples/): [nginx routing](examples/nginx-routing.conf.example), [client configs](examples/client-configs.md)
+| Document | Description |
+|----------|-------------|
+| [docs/getting-started/](docs/getting-started/) | Installation and configuration guides |
+| [docs/concepts/](docs/concepts/) | Architecture and optimization layer explanations |
+| [docs/benchmarks/BENCHMARK.md](docs/benchmarks/BENCHMARK.md) | Detailed performance measurements |
+| [SECURITY.md](SECURITY.md) | Security policy and vulnerability reporting |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines |
 
 ---
 
-## License & source
+## Contributing
 
-- **This repository:** Documentation only. © 2026 ASG. See [LICENSE](LICENSE).
-- **Source code:** Closed-source, proprietary. Not published.
-- **Contact:** Open an issue or discussion — or reach the team for commercial licensing.
+We welcome documentation contributions, bug reports, and feature requests. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-> ⚠️ This is a **public documentation repository for a commercial product**. The mechanisms described here are the product's intellectual property. If you are evaluating whether to build this yourself, note that the value is in the *implementation*, not the concept.
+> **Note**: This repository contains documentation only. The gateway source code is proprietary and not included.
+
+---
+
+## License
+
+This repository is licensed under the [MIT License](LICENSE) for documentation content.
+
+The VBK-AI Agent Gateway software itself is proprietary. See [LICENSE](LICENSE) for details.
+
+---
+
+## Links
+
+- 🌐 **Website**: [www.agentgwapi.online](https://www.agentgwapi.online/)
+- 📧 **Email**: support@agentgwapi.online
+- 🐛 **Issues**: [GitHub Issues](https://github.com/430024299qt-cpu/asg-ai-gateway/issues)
