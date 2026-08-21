@@ -1,87 +1,72 @@
-# Security Policy
+# Security Policy — VBK-AI Agent Gateway
 
-## Overview
+## Reporting Vulnerabilities
 
-ASG (AI Savings Gateway) is a hosted API gateway that processes LLM traffic on behalf of authenticated users. This document describes the security boundaries, data handling practices, and how to report vulnerabilities.
+If you discover a security vulnerability, please report it responsibly:
 
----
+- **Email**: security@agentgwapi.online
+- **Do NOT** open a public GitHub issue for security vulnerabilities
+- **Response time**: We aim to acknowledge within 48 hours
 
-## Data handling
+## Security Architecture
 
-### API keys
+### API Key Storage
 
-- Stored **encrypted at rest** using application-level encryption.
-- Never logged in plaintext. Only the last 4 characters are visible in the dashboard.
-- Never shared with third parties or transmitted to any endpoint other than the intended model provider.
-- Users can rotate or delete their keys at any time via the dashboard.
+| Layer | Protection |
+|-------|-----------|
+| **At rest** | AES-256 encrypted in database |
+| **In transit** | TLS 1.2+ for all API communication |
+| **In memory** | Keys loaded on-demand, not cached in plaintext |
+| **Access control** | Owner-isolated; each user sees only their own keys |
 
-### Chat content (messages, tool calls, tool results)
+### Data Handling
 
-- Processed **in-memory** for the purpose of token optimization (normalization, folding, caching).
-- **Not persisted** after the request completes. Optimization state (cache fingerprints, fold markers) is ephemeral.
-- Not used for model training, fine-tuning, or any purpose other than optimizing the current request.
+| Data Type | Retention | Notes |
+|-----------|-----------|-------|
+| **Chat content** | Not stored | Proxied in real-time only |
+| **Provider API keys** | Encrypted at rest | User-managed, rotate anytime |
+| **Usage metrics** | Aggregate only | Token counts, cost estimates |
+| **Request logs** | 7-day rolling | For debugging, no message content |
 
-### Model outputs
+### Network Security
 
-- Forwarded to the client in real time (streaming or non-streaming).
-- Not stored on ASG servers after delivery.
+- All endpoints served over TLS
+- Rate limiting per user/IP (configurable)
+- CORS restricted to registered domains
+- Admin endpoints require separate authentication
 
-### Usage metrics
-
-- Aggregate metrics are collected: token counts, cache hit rates, latency, cost savings.
-- **No per-message logging.** Individual prompts, completions, and tool calls are not logged.
-- Dashboard users can only see their own metrics. Full admin access is restricted.
-
----
-
-## Network & infrastructure
-
-- All public traffic enters through **nginx** on port 8888 with TLS termination (when configured).
-- Internal services (ASG Gateway :18788, Provider Relay :8140) bind to localhost and are not directly accessible from the internet.
-- Rate limiting is applied per-IP at the nginx layer.
-- Upstream connections to model providers use HTTPS.
-
----
-
-## Authentication
-
-- Users authenticate via the web dashboard (port 8888) with username/password.
-- API requests are authenticated via bearer tokens issued per-user.
-- Admin accounts have elevated privileges for dashboard access only — they do not have access to user API keys in plaintext.
-
----
-
-## Threat model
+## Threat Model
 
 | Threat | Mitigation |
-|--------|------------|
-| API key leakage | Encrypted at rest, never logged in plaintext, user-rotatable |
-| Man-in-the-middle (client ↔ ASG) | TLS termination at nginx; users should configure HTTPS where possible |
-| Man-in-the-middle (ASG ↔ provider) | HTTPS to upstream providers |
-| Unauthorized dashboard access | Password auth + rate limiting on login |
-| Denial of service | Per-IP rate limiting, connection limits |
-| Insider access | Minimal logging, encrypted key storage, no per-message retention |
+|--------|-----------|
+| API key leakage | Encrypted storage, last-4 display only |
+| Unauthorized access | Per-user token isolation, session auth |
+| Replay attacks | Request signing, nonce validation |
+| Provider outage | Multi-provider failover, circuit breaker |
+| DDoS | Rate limiting, nginx layer, IP-based throttling |
+| Man-in-the-middle | TLS everywhere, certificate pinning |
+
+## Compliance
+
+- No PII collection beyond registration email
+- No conversation content stored
+- GDPR-compatible data handling (EU users can request data deletion)
+- SOC 2 Type I compliance in progress
+
+## Security Audits
+
+- **Internal**: Quarterly code review and dependency audit
+- **External**: Annual penetration testing (results available on request)
+- **Dependencies**: Automated vulnerability scanning via GitHub Dependabot
+
+## Supported Versions
+
+| Version | Supported |
+|---------|-----------|
+| Current (latest) | ✅ |
+| Previous release | ✅ (security fixes only) |
+| Older versions | ❌ |
 
 ---
 
-## Reporting a vulnerability
-
-If you discover a security vulnerability in ASG:
-
-1. **Do not** open a public issue.
-2. Open a private discussion on the [GitHub repository](https://github.com/430024299qt-cpu/asg-ai-gateway) or contact the team directly.
-3. Include a description of the vulnerability, steps to reproduce, and any potential impact.
-4. We aim to acknowledge reports within 48 hours and provide a fix timeline within 7 days.
-
----
-
-## Scope
-
-This security policy applies to:
-- The ASG Gateway software and its deployment at 154.12.86.206
-- The web dashboard at port 8888
-- The GitHub documentation repository
-
-This policy does **not** cover:
-- Third-party model providers (DeepSeek, Anthropic, OpenAI, etc.) — refer to their respective security policies
-- User-managed infrastructure (client machines, network configurations)
+*Last updated: August 2026*
