@@ -49,7 +49,7 @@ Be respectful, constructive, and professional. We're here to help developers sav
 
 ## Questions?
 
-- Open a [GitHub Discussion](https://github.com/430024299qt-cpu/asg-ai-gateway/discussions)
+- Open a [GitHub Discussion](https://github.com/430024299qt-cpu/Agent-Gateway/discussions)
 - Email: support@agentgwapi.online
 
 ---
