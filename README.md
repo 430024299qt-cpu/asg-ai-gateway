@@ -181,4 +181,4 @@ The VBK-AI Agent Gateway software itself is proprietary. See [LICENSE](LICENSE) 
 - **Register**: [www.agentgwapi.online/register](http://www.agentgwapi.online:8888/register)
 - **Login**: [www.agentgwapi.online/login](http://www.agentgwapi.online:8888/login)
 - 📧 **Email**: support@agentgwapi.online
-- 🐛 **Issues**: [GitHub Issues](https://github.com/430024299qt-cpu/Agent-Gateway/issues)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/430024299qt-cpu/VBK-AI-Agent-Gateway/issues)
