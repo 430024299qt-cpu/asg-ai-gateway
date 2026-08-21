@@ -24,6 +24,13 @@ That's it. Your existing workflow is unchanged — same agent, same models, lowe
 
 ---
 
+---
+
+## Founders
+
+**Tristan Qin** · **Tomcom Shu** · **Lewis**
+
+---
 ## Supported Agents
 
 | Agent | Provider | Status |
