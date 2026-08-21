@@ -105,7 +105,7 @@
 
 To reproduce these measurements:
 
-1. Register at [www.agentgwapi.online](https://www.agentgwapi.online/)
+1. Register at [www.agentgwapi.online](http://www.agentgwapi.online/)
 2. Configure your agent with the gateway endpoint
 3. Run a typical coding session for 1+ hours
 4. Compare token usage in your provider dashboard vs. gateway dashboard
