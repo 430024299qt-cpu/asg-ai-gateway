@@ -2,17 +2,17 @@
 
 **Same budget. Ship more code.**
 
-[Website](https://www.agentgwapi.online/) · [Documentation](docs/) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
+[Website](http://www.agentgwapi.online/) · [Documentation](docs/) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
 VBK-AI Agent Gateway (agent-gateway) is a server-side API gateway that optimizes LLM traffic for AI coding agents. It sits between your agent and LLM providers, applying caching, request normalization, and routing strategies to reduce token costs by **50-95%** — with zero client-side changes.
 
-> **Zero install.** Register at [www.agentgwapi.online](https://www.agentgwapi.online/), add your provider API key, and point your agent's `base_url` to your gateway endpoint.
+> **Zero install.** Register at [www.agentgwapi.online/register](http://www.agentgwapi.online/register), add your provider API key, and point your agent's `base_url` to your gateway endpoint.
 
 ---
 
 ## Quick Start (3 Steps)
 
-1. **Register** — Visit [www.agentgwapi.online](https://www.agentgwapi.online/) and create a free account
+1. **Register** — Visit [www.agentgwapi.online/register](http://www.agentgwapi.online/register) and create a free account
 2. **Add Provider Key** — In the dashboard, add your DeepSeek / Anthropic / OpenAI / Qwen / Gemini API key
 3. **Configure Agent** — Change your agent's `base_url` to your gateway endpoint:
 
@@ -167,6 +167,8 @@ The VBK-AI Agent Gateway software itself is proprietary. See [LICENSE](LICENSE) 
 
 ## Links
 
-- 🌐 **Website**: [www.agentgwapi.online](https://www.agentgwapi.online/)
+- 🌐 **Website**: [www.agentgwapi.online](http://www.agentgwapi.online/)
+- **Register**: [www.agentgwapi.online/register](http://www.agentgwapi.online/register)
+- **Login**: [www.agentgwapi.online/login](http://www.agentgwapi.online/login)
 - 📧 **Email**: support@agentgwapi.online
-- 🐛 **Issues**: [GitHub Issues](https://github.com/430024299qt-cpu/asg-ai-gateway/issues)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/430024299qt-cpu/Agent-Gateway/issues)
