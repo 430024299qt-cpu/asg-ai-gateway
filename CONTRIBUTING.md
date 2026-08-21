@@ -1,52 +1,57 @@
-# Contributing to ASG
+# Contributing to VBK-AI Agent Gateway
 
-Thank you for your interest in ASG. This is a documentation-only repository for a commercial product. While the source code is not open, contributions to documentation, examples, and community knowledge are welcome.
+Thank you for your interest in contributing! This repository contains **documentation only** — the gateway source code is proprietary.
+
+## What We Accept
+
+- 📖 **Documentation improvements** — fixes, clarifications, translations
+- 🐛 **Bug reports** — via GitHub Issues (include steps to reproduce)
+- 💡 **Feature requests** — via GitHub Issues (describe use case)
+- 📊 **Benchmark data** — real-world measurements from your usage
+
+## What We Don't Accept
+
+- ❌ Source code (this is a documentation repo)
+- ❌ Automated bulk edits
+- ❌ Off-topic discussions
+
+## How to Contribute
+
+1. **Fork** this repository
+2. **Create a branch** (`git checkout -b docs/improve-quickstart`)
+3. **Make your changes** following our style guide below
+4. **Submit a PR** with a clear description of what changed and why
+
+## Style Guide
+
+- Use **American English** for documentation
+- Keep paragraphs concise (3-5 sentences max)
+- Use tables for structured data
+- Include code examples where applicable
+- Link to relevant sections in `docs/` when referencing concepts
+
+## Issue Templates
+
+### Bug Report
+- **What happened**: Clear description of the issue
+- **Expected behavior**: What should have happened
+- **Steps to reproduce**: Numbered list
+- **Environment**: Agent name, provider, gateway version
+
+### Feature Request
+- **Use case**: What problem does this solve?
+- **Proposed solution**: How should it work?
+- **Alternatives considered**: Other approaches you thought about
+
+## Code of Conduct
+
+Be respectful, constructive, and professional. We're here to help developers save on LLM costs.
+
+## Questions?
+
+- Open a [GitHub Discussion](https://github.com/430024299qt-cpu/asg-ai-gateway/discussions)
+- Email: support@agentgwapi.online
 
 ---
 
-## How to contribute
-
-### Documentation improvements
-
-Found a typo, unclear explanation, or missing information? Open a pull request:
-
-1. Fork this repository
-2. Create a branch: `git checkout -b fix/your-improvement`
-3. Make your changes
-4. Open a PR with a clear description of what you changed and why
-
-### Examples & integrations
-
-Have you configured ASG with a tool or agent not yet documented? We'd love to add it:
-
-- Add a config example to [examples/](examples/)
-- Add a guide to [docs/getting-started/](docs/getting-started/)
-
-### Bug reports & feature requests
-
-Open an issue using the appropriate template. Please include:
-
-- **Bug reports:** Steps to reproduce, expected vs actual behavior, your client and version
-- **Feature requests:** Use case, why it matters, any workarounds you've tried
-
----
-
-## What we can't accept
-
-Since ASG is closed-source, we cannot accept:
-
-- Pull requests that modify source code (there is none in this repo)
-- Reverse-engineering attempts or leaked code
-- Issues that require disclosing proprietary implementation details
-
----
-
-## Code of conduct
-
-Be respectful, constructive, and assume good faith. We're all here to make AI coding more affordable.
-
----
-
-## License
-
-By contributing, you agree that your contributions will be licensed under the same license as this repository (see [LICENSE](LICENSE)).
+*Last updated: August 2026*
